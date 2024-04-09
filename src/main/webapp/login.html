@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>登录</title>
+    <style>
+        body {
+            font: 12px/19px Arial, Helvetica, sans-serif;
+            color: #666;
+        }
+
+        form div {
+            margin: 5px 0;
+        }
+
+        .int label {
+            width: 100px;
+            float: left;
+            text-align: right;
+        }
+
+        .int input {
+            padding: 1px 1px;
+            border: 1px solid #ccc;
+            height: 16px;
+        }
+
+        .sub {
+            padding-left: 100px;
+        }
+
+        .sub input {
+            margin-right: 10px;
+        }
+
+
+    </style>
+    <script src="js/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+
+<form id="loginForm">
+
+    <div class="int">
+        <label for="username">用户名:</label><input type="text" name="username" id="username"
+                                                    placeholder="请输入用户名"> <br/>
+    </div>
+
+    <div class="int">
+        <label for="password">密码:</label> <input type="password" name="password" id="password"
+                                                   placeholder="请输入密码"> <br/>
+    </div>
+        <div class="sub">
+            <button type="button" id="loginButton">登录</button>
+        </div>
+        <div class="sub">
+            <input type="checkbox" name="rememberMe" id="rememberMe" value="1"/><label for="rememberMe">记住用户名</label>
+        </div>
+
+</form>
+<script>
+    let index = document.cookie.indexOf("=")
+    let username = document.cookie.substring(index + 1);
+    document.getElementById("username").value = username;
+
+    $("#loginButton").click(function () {
+        $.post("login-servlet", $("#loginForm").serialize(), function (data) {
+            if (data.success) {
+                window.location.href = "index.jsp";
+            } else {
+                alert(data.message);
+            }
+        }, "json");
+    });
+
+
+    $(document).ready(function () {
+        let index = document.cookie.indexOf("username=");
+        if (index !== -1) {
+            $("input[name='rememberMe']").prop('checked', true);
+        }
+    });
+
+
+</script>
+</body>
+</html>
